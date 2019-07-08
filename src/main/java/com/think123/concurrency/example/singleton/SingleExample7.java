@@ -1,4 +1,4 @@
-package com.think123.concurrency.singleton;
+package com.think123.concurrency.example.singleton;
 
 import com.think123.concurrency.annoations.Recommend;
 import com.think123.concurrency.annoations.ThreadSafe;

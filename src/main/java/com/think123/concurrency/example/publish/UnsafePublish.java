@@ -1,4 +1,4 @@
-package com.think123.concurrency.publish;
+package com.think123.concurrency.example.publish;
 
 import com.think123.concurrency.annoations.NotThreadSafe;
 import lombok.extern.slf4j.Slf4j;
