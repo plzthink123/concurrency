@@ -1,4 +1,4 @@
-package com.think123.concurrency.example.Atomic;
+package com.think123.concurrency.example.lock;
 
 import com.think123.concurrency.annoations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
@@ -7,17 +7,20 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @ThreadSafe
-public class AtomicExample1 {
+public class LockExample2 {
     //请求总数
     public static int clientTotal=5000;
     //线程总数
     public static int threadTotal=200;
 
-    public static AtomicInteger count = new AtomicInteger(0);
+    public static int count =0;
+
+    public  static final Lock lock=new ReentrantLock();
 
 
     public static void main(String[] args) throws Exception{
@@ -28,15 +31,8 @@ public class AtomicExample1 {
         for(int i= 0; i<clientTotal;i++){
             executorService.execute(()->{
                 try {
-                    /**
-                     * 引入信号量
-                     * 先调用acquire方法,判断当前线程是否允许被执行
-                     */
                     semaphore.acquire();
                     add();
-                    /**
-                     * 方法执行结束之后调用release方法
-                     */
                     semaphore.release();
                 }catch (Exception e){
                     //记录异常
@@ -47,11 +43,15 @@ public class AtomicExample1 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("count{}",count.get());
+        log.info("count{}",count);
     }
 
-    private static void add(){
-        count.incrementAndGet();
-       // count.getAndIncrement();
+    private  static void add(){
+        lock.lock();
+        try {
+            count++;
+        }finally{
+            lock.unlock();
+        }
     }
 }

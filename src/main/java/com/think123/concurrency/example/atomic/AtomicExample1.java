@@ -1,4 +1,4 @@
-package com.think123.concurrency.example.Atomic;
+package com.think123.concurrency.example.atomic;
 
 import com.think123.concurrency.annoations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
@@ -7,27 +7,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @ThreadSafe
-/**
- * LongAdder     JDK8新增的一个类,
- *              核心思想:
- *                  将热点数据分离
- *                 低并发:
- *                 高并发:热点分离,实现均衡
- *              缺点:  在统计的时候,如果有并发更新,则会有数据误差
- *
- *              在高并发情况下,尽量使用LongAdder,减少使用Atomic
- */
-public class AtomicExample3 {
+public class AtomicExample1 {
     //请求总数
     public static int clientTotal=5000;
     //线程总数
     public static int threadTotal=200;
 
-    public static LongAdder count = new LongAdder();
+    public static AtomicInteger count = new AtomicInteger(0);
 
 
     public static void main(String[] args) throws Exception{
@@ -57,11 +47,11 @@ public class AtomicExample3 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("count{}",count);
+        log.info("count{}",count.get());
     }
 
     private static void add(){
-        count.increment();
+        count.incrementAndGet();
        // count.getAndIncrement();
     }
 }

@@ -1,4 +1,4 @@
-package com.think123.concurrency.example.Atomic;
+package com.think123.concurrency.example.atomic;
 
 import com.think123.concurrency.annoations.ThreadSafe;
 import lombok.Getter;
